@@ -1,5 +1,7 @@
+import os
 import platform
 import subprocess
+import sys
 
 import cv2
 import dlib
@@ -7,8 +9,18 @@ import numpy as np
 from scipy.spatial import distance as dist
 
 
+def get_resource_path(filename):
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, filename)
+
+
+dat_file = get_resource_path("shape_predictor_68_face_landmarks.dat")
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+predictor = dlib.shape_predictor(dat_file)
 
 LEFT_EYE = list(range(42, 48))
 RIGHT_EYE = list(range(36, 42))
